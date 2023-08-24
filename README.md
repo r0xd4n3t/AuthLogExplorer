@@ -42,10 +42,10 @@ To run Auth Log Analyzer, you need the following:
 ## 🕹️ Usage
 1. Clone this repository to your local machine:
    ```sh
-   git clone https://github.com/your-username/auth-log-analyzer.git
+   git clone https://github.com/r0xd4n3t/AuthLogExplorer.git
 2. Navigate to the repository folder:
    ```sh
-   cd auth-log-analyzer
+   cd AuthLogExplorer
 3. Run the script with the folder containing your "auth.log" file as an argument:
    ```sh
    python auth_log_analyzer.py -f /path/to/auth/logs/
