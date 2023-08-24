@@ -1,4 +1,5 @@
 import os
+import random
 import re
 import argparse
 from datetime import datetime
@@ -36,6 +37,21 @@ def generate_html_report(logs):
     successful_entries = extract_ip_addresses(logs, "Accepted")
     failed_entries = extract_ip_addresses(logs, "Failed")
 
+    # Generate a random background color for the #4CAF50 element
+    th_background_color = "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+    table_rows = ""
+    for log in logs:
+        timestamp, message = log
+        table_row = "<tr><td>{}</td><td>{}</td></tr>".format(timestamp, message)
+        table_rows += table_row
+
+    successful_entries_list = "\n".join("<li>{}</li>".format(entry) for entry in successful_entries)
+    successful_entries_list = successful_entries_list if successful_entries else "None"
+
+    failed_entries_list = "\n".join("<li>{}</li>".format(entry) for entry in failed_entries)
+    failed_entries_list = failed_entries_list if failed_entries else "None"
+
     html = """
     <html>
     <head>
@@ -60,7 +76,7 @@ def generate_html_report(logs):
             }}
 
             th {{
-                background-color: #4CAF50;
+                background-color: {};
                 color: white;
             }}
 
@@ -97,21 +113,8 @@ def generate_html_report(logs):
         </div>
     </body>
     </html>
-    """
+    """.format(th_background_color, table_rows, total_entries, successful_logins, failed_logins, successful_entries_list, failed_entries_list)
 
-    table_rows = ""
-    for log in logs:
-        timestamp, message = log
-        table_row = "<tr><td>{}</td><td>{}</td></tr>".format(timestamp, message)
-        table_rows += table_row
-
-    successful_entries_list = "\n".join("<li>{}</li>".format(entry) for entry in successful_entries)
-    successful_entries_list = successful_entries_list if successful_entries else "None"
-
-    failed_entries_list = "\n".join("<li>{}</li>".format(entry) for entry in failed_entries)
-    failed_entries_list = failed_entries_list if failed_entries else "None"
-
-    html = html.format(table_rows, total_entries, successful_logins, failed_logins, successful_entries_list, failed_entries_list)
     return html
 
 # Parse command-line arguments
