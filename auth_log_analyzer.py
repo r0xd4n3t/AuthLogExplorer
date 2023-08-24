@@ -73,6 +73,7 @@ def generate_html_report(logs):
             th, td {{
                 text-align: left;
                 padding: 8px;
+                border: 1px solid #ddd; /* Add border to th and td */
             }}
 
             th {{
