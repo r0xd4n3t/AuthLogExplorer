@@ -161,7 +161,7 @@ if auth_log_file:
     with open(report_file, 'w') as file:
         file.write(html_report)
 
-    print("HTML report generated successfully!")
-    print("Report file path: {}".format(report_file))
+    print("[*] HTML report generated successfully!")
+    print("[i] Report file path: {}".format(report_file))
 else:
-    print("auth.log file not found in the specified folder.")
+    print("[x] auth.log file not found in the specified folder.")
