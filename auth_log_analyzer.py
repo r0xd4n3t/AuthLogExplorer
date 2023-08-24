@@ -29,6 +29,9 @@ def extract_ip_addresses(logs, keyword):
                 log_entries.append("{} {} {}".format(ip_address, timestamp, user_id))
     return log_entries
 
+def generate_random_color():
+    return "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
 def generate_html_report(logs):
     total_entries = len(logs)
     successful_logins = len([log for log in logs if "Accepted" in log[1]])
@@ -38,7 +41,10 @@ def generate_html_report(logs):
     failed_entries = extract_ip_addresses(logs, "Failed")
 
     # Generate a random background color for the #4CAF50 element
-    th_background_color = "#{:02x}{:02x}{:02x}".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    th_background_color = generate_random_color()
+
+    # Use the same random background color for the footer as for th_background_color
+    footer_background_color = th_background_color
 
     table_rows = ""
     for log in logs:
@@ -51,6 +57,12 @@ def generate_html_report(logs):
 
     failed_entries_list = "\n".join("<li>{}</li>".format(entry) for entry in failed_entries)
     failed_entries_list = failed_entries_list if failed_entries else "None"
+
+    copyleft_footer = """
+    <footer style="background-color: {};">
+        <p>&copy; {} Let's Rock the Net! All rights reserved.</p>
+    </footer>
+    """.format(footer_background_color, datetime.now().year)
 
     html = """
     <html>
@@ -91,6 +103,13 @@ def generate_html_report(logs):
                 padding: 10px;
                 border: 1px solid #ddd;
             }}
+
+            footer {{
+                text-align: center;
+                margin-top: 20px;
+                color: white;
+                padding: 10px;
+            }}
         </style>
     </head>
     <body>
@@ -112,9 +131,10 @@ def generate_html_report(logs):
             <h3>Failed IPs:</h3>
             {}
         </div>
+        {}
     </body>
     </html>
-    """.format(th_background_color, table_rows, total_entries, successful_logins, failed_logins, successful_entries_list, failed_entries_list)
+    """.format(th_background_color, table_rows, total_entries, successful_logins, failed_logins, successful_entries_list, failed_entries_list, copyleft_footer)
 
     return html
 
